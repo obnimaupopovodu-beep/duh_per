@@ -13,24 +13,40 @@ import {
   bookingSchema,
 } from "@/lib/booking.schema";
 
-const fieldGroupClass = "space-y-2";
+// Floating-label underline field wrapper
+function FloatField({
+  id,
+  label,
+  error,
+  children,
+}: {
+  id: string;
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="float-field">
+      {children}
+      <label htmlFor={id}>{label}</label>
+      <span className="float-field__line" />
+      {error ? <p className="float-field__error">{error}</p> : null}
+    </div>
+  );
+}
 
 export default function BookingForm() {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
-    "idle",
-  );
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [submittedName, setSubmittedName] = useState("");
   const [showMobileCta, setShowMobileCta] = useState(true);
 
   useEffect(() => {
     const element = document.getElementById("booking");
     if (!element) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => setShowMobileCta(!entry.isIntersecting),
       { threshold: 0.2 },
     );
-
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
@@ -43,29 +59,18 @@ export default function BookingForm() {
     reset,
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
-    defaultValues: {
-      service: "haircut-female",
-      preferredTime: "",
-      comment: "",
-    },
+    defaultValues: { service: "haircut-female", preferredTime: "", comment: "" },
   });
 
   const onSubmit = async (data: BookingFormData) => {
     setStatus("loading");
-
     try {
       const response = await fetch("/api/booking", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-
+      if (!response.ok) throw new Error("Request failed");
       setSubmittedName(data.name);
       setStatus("success");
       reset();
@@ -78,23 +83,23 @@ export default function BookingForm() {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-10%" }}
-        transition={{ duration: 0.7 }}
-        className="rounded-[24px] border border-border/80 bg-surface p-6 shadow-lg md:p-8"
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="rounded-[2px] border border-[var(--color-line-soft)] bg-surface p-8 md:p-10"
       >
         <AnimatePresence mode="wait">
           {status === "success" ? (
             <motion.div
               key="success"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               className="flex min-h-[480px] flex-col items-center justify-center text-center"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-primary/30 bg-primary-highlight text-primary">
-                <Check size={28} />
+              <div className="flex h-14 w-14 items-center justify-center rounded-[2px] border border-[var(--color-line)] text-primary">
+                <Check size={24} />
               </div>
               <h3 className="mt-6 font-display text-4xl font-light italic">
                 Ваша заявка принята
@@ -104,12 +109,7 @@ export default function BookingForm() {
                 мы свяжемся с вами в ближайшее время, чтобы подтвердить запись и
                 подобрать удобное окно.
               </p>
-              <Button
-                type="button"
-                variant="outline"
-                className="mt-8"
-                href="#top"
-              >
+              <Button type="button" variant="outline" className="mt-8" href="#top">
                 Вернуться наверх
               </Button>
             </motion.div>
@@ -120,109 +120,91 @@ export default function BookingForm() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               onSubmit={handleSubmit(onSubmit)}
-              className="space-y-5"
+              className="space-y-7"
             >
-              <div className="grid gap-5 md:grid-cols-2">
-                <div className={fieldGroupClass}>
-                  <label htmlFor="name" className="text-sm text-muted">
-                    Имя*
-                  </label>
+              <div className="grid gap-7 md:grid-cols-2">
+                <FloatField id="name" label="Имя *" error={errors.name?.message}>
                   <input
                     id="name"
                     type="text"
                     autoComplete="name"
-                    className="field-base"
+                    className="float-field__input"
+                    placeholder=" "
                     {...register("name")}
                   />
-                  {errors.name ? (
-                    <p className="text-sm text-primary">{errors.name.message}</p>
-                  ) : null}
-                </div>
+                </FloatField>
 
-                <div className={fieldGroupClass}>
-                  <label htmlFor="phone" className="text-sm text-muted">
-                    Телефон*
-                  </label>
+                <FloatField id="phone" label="Телефон *" error={errors.phone?.message}>
                   <input
                     id="phone"
                     type="tel"
                     autoComplete="tel"
-                    className="field-base"
+                    className="float-field__input"
+                    placeholder=" "
                     {...register("phone")}
                   />
-                  {errors.phone ? (
-                    <p className="text-sm text-primary">{errors.phone.message}</p>
-                  ) : null}
-                </div>
+                </FloatField>
               </div>
 
-              <div className="grid gap-5 md:grid-cols-2">
-                <div className={fieldGroupClass}>
-                  <label htmlFor="service" className="text-sm text-muted">
-                    Услуга
-                  </label>
-                  <select id="service" className="field-base" {...register("service")}>
+              <div className="grid gap-7 md:grid-cols-2">
+                <FloatField id="service" label="Услуга" error={errors.service?.message}>
+                  <select
+                    id="service"
+                    className="float-field__input float-field__select"
+                    {...register("service")}
+                  >
                     {BOOKING_SERVICE_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
                     ))}
                   </select>
-                  {errors.service ? (
-                    <p className="text-sm text-primary">{errors.service.message}</p>
-                  ) : null}
-                </div>
+                </FloatField>
 
-                <div className={fieldGroupClass}>
-                  <label htmlFor="preferredTime" className="text-sm text-muted">
-                    Удобное время
-                  </label>
+                <FloatField id="preferredTime" label="Удобное время">
                   <input
                     id="preferredTime"
                     type="text"
-                    placeholder="например, будни после 18:00"
-                    className="field-base"
+                    className="float-field__input"
+                    placeholder=" "
                     {...register("preferredTime")}
                   />
-                </div>
+                </FloatField>
               </div>
 
-              <div className={fieldGroupClass}>
-                <label htmlFor="comment" className="text-sm text-muted">
-                  Комментарий
-                </label>
+              <FloatField id="comment" label="Комментарий" error={errors.comment?.message}>
                 <textarea
                   id="comment"
-                  rows={5}
-                  className="field-base min-h-[140px] resize-y"
+                  rows={4}
+                  className="float-field__input float-field__textarea"
+                  placeholder=" "
                   {...register("comment")}
                 />
-                {errors.comment ? (
-                  <p className="text-sm text-primary">{errors.comment.message}</p>
-                ) : null}
-              </div>
+              </FloatField>
 
               {status === "error" ? (
-                <p className="rounded-md border border-primary/20 bg-primary-highlight px-4 py-3 text-sm text-text">
-                  Не удалось отправить заявку. Попробуйте ещё раз или позвоните
-                  нам напрямую по номеру +7 (926) 153-23-43.
+                <p className="border border-[var(--color-line)] px-4 py-3 text-sm text-text">
+                  Не удалось отправить заявку. Позвоните нам напрямую:
+                  +7 (926) 153-23-43.
                 </p>
               ) : null}
 
-              <Button
-                type="submit"
-                disabled={status === "loading"}
-                className="w-full"
-              >
-                {status === "loading" ? (
-                  <span className="inline-flex items-center gap-2">
-                    <Loader2 size={16} className="animate-spin" />
-                    Отправляем
-                  </span>
-                ) : (
-                  "Отправить заявку"
-                )}
-              </Button>
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="hover:-translate-y-0.5 hover:shadow-md"
+                >
+                  {status === "loading" ? (
+                    <span className="inline-flex items-center gap-2">
+                      <Loader2 size={14} className="animate-spin" />
+                      Отправляем
+                    </span>
+                  ) : (
+                    "Записаться"
+                  )}
+                </Button>
+              </div>
             </motion.form>
           )}
         </AnimatePresence>
@@ -235,7 +217,7 @@ export default function BookingForm() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-bg/90 p-4 backdrop-blur-sm md:hidden"
+            className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--color-line-soft)] bg-bg/90 p-4 backdrop-blur-sm md:hidden"
           >
             <Button href="#booking" className="w-full">
               Записаться

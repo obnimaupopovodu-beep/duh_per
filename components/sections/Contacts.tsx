@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
-import { Clock3, MapPinned, Phone } from "lucide-react";
+import { Clock3, Compass, MapPin, Phone } from "lucide-react";
 import { useRef } from "react";
 
 import SectionTitle from "@/components/ui/SectionTitle";
@@ -11,7 +11,7 @@ import entranceAltImage from "@/img/enterence1.webp";
 
 const contactItems = [
   {
-    icon: MapPinned,
+    icon: MapPin,
     label: "Адрес",
     value: "Москва, Духовской переулок, 17с10",
   },
@@ -23,7 +23,7 @@ const contactItems = [
   },
   {
     icon: Clock3,
-    label: "Часы",
+    label: "Часы работы",
     value: "Ежедневно до 23:00",
   },
 ];
@@ -35,10 +35,10 @@ export default function Contacts() {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7 }}
-      className="space-y-8"
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      className="space-y-10"
     >
       <SectionTitle
         eyebrow="Запись"
@@ -46,27 +46,34 @@ export default function Contacts() {
         description="Оставьте заявку — свяжемся в течение часа и подберём удобное время визита."
       />
 
-      <div className="space-y-5">
-        {contactItems.map((item) => {
+      {/* Contact items — flat list with dividers, no cards */}
+      <div className="space-y-0">
+        {contactItems.map((item, i) => {
           const Icon = item.icon;
-
           return (
-            <div
-              key={item.label}
-              className="rounded-lg border border-border/70 bg-surface p-5 shadow-sm"
-            >
-              <div className="flex items-start gap-4">
-                <Icon className="mt-1 text-primary" size={18} />
-                <div>
-                  <p className="font-body text-[13px] uppercase tracking-[0.12em] text-muted">
+            <div key={item.label}>
+              {i > 0 && (
+                <hr className="border-0 border-t border-[var(--color-line-soft)]" />
+              )}
+              <div className="flex items-start gap-4 py-5">
+                <Icon
+                  size={16}
+                  className="mt-0.5 shrink-0 text-muted"
+                  strokeWidth={1.5}
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-body text-[10px] font-light uppercase tracking-[0.2em] text-muted">
                     {item.label}
                   </p>
                   {item.href ? (
-                    <a href={item.href} className="mt-2 block text-text hover:text-primary">
+                    <a
+                      href={item.href}
+                      className="mt-1.5 block text-base text-text transition-colors duration-300 hover:text-primary"
+                    >
                       {item.value}
                     </a>
                   ) : (
-                    <p className="mt-2 text-text">{item.value}</p>
+                    <p className="mt-1.5 text-base text-text">{item.value}</p>
                   )}
                 </div>
               </div>
@@ -75,32 +82,34 @@ export default function Contacts() {
         })}
       </div>
 
+      {/* Map link — styled card */}
       <a
         href="https://yandex.ru/maps/-/CHdEbB~w"
         target="_blank"
         rel="noreferrer"
-        className="block overflow-hidden rounded-[22px] border border-border/70 bg-surface shadow-md"
+        className="group block overflow-hidden rounded-[2px] border border-[oklch(from_var(--color-text)_l_c_h_/_0.12)] transition-shadow duration-300 hover:shadow-md"
       >
-        <div className="relative min-h-[260px]">
-          {/* TODO: заменить на реальный фрагмент карты или фото входа */}
+        <div className="relative min-h-[220px]">
           <Image
             src={entranceAltImage}
             alt="Вход в салон рядом с картой проезда"
             fill
             sizes="(max-width: 1024px) 100vw, 35vw"
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
           />
         </div>
-        <div className="flex items-center justify-between gap-4 border-t border-border/70 px-5 py-4">
+        <div className="flex items-center justify-between gap-4 border-t border-[var(--color-line-soft)] px-5 py-4">
           <div>
-            <p className="font-body text-[13px] uppercase tracking-[0.12em] text-muted">
+            <p className="font-body text-[10px] font-light uppercase tracking-[0.2em] text-muted">
               Яндекс.Карты
             </p>
-            <p className="text-sm text-text">Открыть маршрут до салона</p>
+            <p className="mt-1 text-sm text-text">Открыть маршрут до салона</p>
           </div>
-          <span className="font-body text-[13px] uppercase tracking-[0.12em] text-primary">
-            Смотреть
-          </span>
+          <Compass
+            size={18}
+            strokeWidth={1.5}
+            className="shrink-0 text-muted transition-colors duration-300 group-hover:text-primary"
+          />
         </div>
       </a>
     </motion.div>
