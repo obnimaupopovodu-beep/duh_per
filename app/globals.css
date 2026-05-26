@@ -17,15 +17,15 @@
     --color-text-inverse:   #0d0c0b;
 
     /* Gold accent */
-    --color-primary:        #c9a84c;
-    --color-primary-hover:  #b8933a;
-    --color-primary-active: #a07c28;
+    --color-primary:           #c9a84c;
+    --color-primary-hover:     #b8933a;
+    --color-primary-active:    #a07c28;
     --color-primary-highlight: rgba(201, 168, 76, 0.12);
 
-    /* Legacy dark vars (footer still uses them) */
-    --color-dark-bg:        #0d0c0b;
-    --color-dark-surface:   #141210;
-    --color-dark-text:      #e8e0d4;
+    /* Legacy dark vars */
+    --color-dark-bg:      #0d0c0b;
+    --color-dark-surface: #141210;
+    --color-dark-text:    #e8e0d4;
 
     --color-line:      rgba(201, 168, 76, 0.10);
     --color-line-soft: rgba(201, 168, 76, 0.05);
@@ -101,7 +101,7 @@
     @apply mx-auto max-w-6xl px-5 sm:px-6 lg:px-8;
   }
 
-  /* ── Hero ──────────────────────────────────────────── */
+  /* ── Hero ──────────────────────────────────────────────── */
   .luxury-hero {
     position: relative;
     isolation: isolate;
@@ -126,25 +126,17 @@
       linear-gradient(to right, rgba(13,12,11,0.4) 0%, transparent 55%);
   }
 
-  /* ── Section bands ─────────────────────────────────── */
+  /* ── Section bands ──────────────────────────────────────── */
   .section-band {
     position: relative;
     isolation: isolate;
   }
 
-  .section-band--dark {
-    background: var(--color-bg);
-  }
+  .section-band--dark  { background: var(--color-bg); }
+  .section-band--lift  { background: var(--color-surface); }
+  .section-band--mid   { background: var(--color-surface-2); }
 
-  .section-band--lift {
-    background: var(--color-surface);
-  }
-
-  .section-band--mid {
-    background: var(--color-surface-2);
-  }
-
-  /* ── Gold rule line ─────────────────────────────────── */
+  /* ── Gold rule ───────────────────────────────────────────── */
   .gold-rule {
     display: block;
     width: 40px;
@@ -153,9 +145,22 @@
     flex-shrink: 0;
   }
 
-  /* ── Nav ────────────────────────────────────────────── */
+  /* ── Nav link — NO opacity modifiers in @apply ───────────── */
   .nav-link {
-    @apply relative inline-flex items-center font-body text-[11px] font-light uppercase tracking-[0.18em] text-text/60 transition-colors duration-300 hover:text-text;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-jost), system-ui, sans-serif;
+    font-size: 0.6875rem;        /* 11px */
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(232, 224, 212, 0.55);  /* text / 55% */
+    transition: color 300ms ease;
+  }
+
+  .nav-link:hover {
+    color: var(--color-text);
   }
 
   .nav-link::after {
@@ -176,7 +181,7 @@
     transform: scaleX(1);
   }
 
-  /* ── Service card (dark) ─────────────────────────────── */
+  /* ── Service card ────────────────────────────────────────── */
   .service-card {
     border: 1px solid var(--color-border);
     background: var(--color-surface);
@@ -189,7 +194,7 @@
     box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.06) inset, var(--shadow-md);
   }
 
-  /* ── Review card ─────────────────────────────────────── */
+  /* ── Review card ─────────────────────────────────────────── */
   .review-card {
     border: 1px solid var(--color-border);
     background: var(--color-surface);
@@ -198,12 +203,12 @@
     flex-shrink: 0;
   }
 
-  /* ── Image frame ─────────────────────────────────────── */
+  /* ── Image frame ─────────────────────────────────────────── */
   .image-frame {
-    box-shadow: 0 0 0 1px rgba(201,168,76,0.08) inset;
+    box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.08) inset;
   }
 
-  /* ── Booking band ────────────────────────────────────── */
+  /* ── Booking band ────────────────────────────────────────── */
   .booking-band {
     position: relative;
     isolation: isolate;
@@ -212,7 +217,7 @@
     border-bottom: 1px solid var(--color-border);
   }
 
-  /* ── Floating label fields ───────────────────────────── */
+  /* ── Floating label fields ───────────────────────────────── */
   .float-field {
     position: relative;
     padding-top: 1.25rem;
@@ -294,12 +299,12 @@
 
   .float-field__select { cursor: pointer; }
 
-  /* ── Legacy field-base (booking form) ───────────────── */
+  /* ── Legacy field-base ───────────────────────────────────── */
   .field-base {
-    @apply min-h-12 w-full rounded-[1px] border border-border bg-surface-2 px-4 py-3 text-base font-light text-text placeholder:text-faint focus:border-primary focus:outline-none;
+    @apply min-h-12 w-full rounded-sm border border-border bg-surface-2 px-4 py-3 text-base font-light text-text placeholder:text-faint focus:border-primary focus:outline-none;
   }
 
-  /* ── Reviews scroll track ────────────────────────────── */
+  /* ── Reviews scroll track ────────────────────────────────── */
   .reviews-track {
     display: flex;
     gap: 1.25rem;
@@ -309,7 +314,7 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* ── Section title ───────────────────────────────────── */
+  /* ── Section eyebrow ─────────────────────────────────────── */
   .section-eyebrow {
     display: flex;
     align-items: center;
@@ -323,7 +328,7 @@
     margin-bottom: 1.25rem;
   }
 
-  /* ── Logo mark ───────────────────────────────────────── */
+  /* ── Logo mark ───────────────────────────────────────────── */
   .logo-mark {
     background: rgba(201, 168, 76, 0.06);
   }
