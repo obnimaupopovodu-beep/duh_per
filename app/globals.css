@@ -4,112 +4,85 @@
 
 @layer base {
   :root {
-    --color-bg: #e8dccd;
-    --color-surface: #f0e6d8;
-    --color-surface-2: #f7f0e6;
-    --color-surface-offset: #dccbb7;
-    --color-divider: #cbb8a0;
-    --color-border: #bcaa93;
-    --color-text: #332319;
-    --color-text-muted: #715b49;
-    --color-text-faint: #a08a75;
-    --color-text-inverse: #f8f0e5;
-    --color-primary: #7f4a24;
-    --color-primary-hover: #693a1b;
-    --color-primary-highlight: #e5d2bf;
-    --color-dark-bg: #22150f;
-    --color-dark-surface: #312018;
-    --color-dark-text: #ecdfd1;
-    --color-olive-shadow: #5d4d3c;
-    --color-clay-shadow: #8f654c;
-    --color-line: rgba(127, 74, 36, 0.16);
-    --color-line-soft: rgba(127, 74, 36, 0.08);
+    /* ── Dark luxury palette ── */
+    --color-bg:             #0d0c0b;
+    --color-surface:        #141210;
+    --color-surface-2:      #1a1714;
+    --color-surface-offset: #201d19;
+    --color-divider:        #2a2622;
+    --color-border:         #302c27;
+    --color-text:           #e8e0d4;
+    --color-text-muted:     #8a8074;
+    --color-text-faint:     #4e4840;
+    --color-text-inverse:   #0d0c0b;
 
-    --radius-sm: 2px;
-    --radius-md: 4px;
-    --radius-lg: 8px;
-    --shadow-sm: 0 1px 3px rgba(42, 33, 24, 0.06);
-    --shadow-md: 0 8px 24px rgba(42, 33, 24, 0.09);
-    --shadow-lg: 0 26px 70px rgba(42, 33, 24, 0.14);
+    /* Gold accent */
+    --color-primary:        #c9a84c;
+    --color-primary-hover:  #b8933a;
+    --color-primary-active: #a07c28;
+    --color-primary-highlight: rgba(201, 168, 76, 0.12);
+
+    /* Legacy dark vars (footer still uses them) */
+    --color-dark-bg:        #0d0c0b;
+    --color-dark-surface:   #141210;
+    --color-dark-text:      #e8e0d4;
+
+    --color-line:      rgba(201, 168, 76, 0.10);
+    --color-line-soft: rgba(201, 168, 76, 0.05);
+
+    --radius-sm: 1px;
+    --radius-md: 2px;
+    --radius-lg: 4px;
+
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+    --shadow-md: 0 8px 32px rgba(0,0,0,0.5);
+    --shadow-lg: 0 26px 80px rgba(0,0,0,0.6);
   }
 
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 5rem;
   }
 
   body {
     @apply font-body text-base font-light leading-relaxed text-text;
-    background:
-      radial-gradient(circle at 11% 10%, rgba(252, 246, 238, 0.92) 0, rgba(252, 246, 238, 0) 28rem),
-      radial-gradient(circle at 86% 6%, rgba(127, 74, 36, 0.12) 0, rgba(127, 74, 36, 0) 24rem),
-      radial-gradient(circle at 90% 47%, rgba(93, 77, 60, 0.18) 0, rgba(93, 77, 60, 0) 30rem),
-      linear-gradient(145deg, #eadfd0 0%, #dfcfbb 45%, #efe4d8 100%);
+    background-color: var(--color-bg);
     min-width: 320px;
   }
 
+  /* Grain overlay */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    opacity: 0.11;
-    mix-blend-mode: multiply;
-    background-image:
-      linear-gradient(rgba(51, 35, 25, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(51, 35, 25, 0.022) 1px, transparent 1px);
-    background-size: 42px 42px, 42px 42px;
-    mask-image: linear-gradient(to bottom, transparent 0%, black 16%, black 78%, transparent 100%);
-  }
-
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0.55;
-    background:
-      radial-gradient(circle at 84% 18%, transparent 0 10rem, var(--color-line) 10rem 10.1rem, transparent 10.1rem),
-      radial-gradient(circle at 15% 73%, transparent 0 14rem, var(--color-line-soft) 14rem 14.08rem, transparent 14.08rem),
-      linear-gradient(100deg, transparent 0 20%, var(--color-line-soft) 20% 20.08%, transparent 20.08% 100%),
-      linear-gradient(180deg, transparent 0 68%, var(--color-line-soft) 68% 68.08%, transparent 68.08% 100%);
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
   }
 
   ::selection {
-    background: rgba(184, 145, 58, 0.18);
+    background: rgba(201, 168, 76, 0.22);
+    color: var(--color-text);
   }
 
-  a,
-  button,
-  input,
-  select,
-  textarea {
+  a, button, input, select, textarea {
     -webkit-tap-highlight-color: transparent;
   }
 
-  a,
-  button {
+  a, button {
     @apply min-h-11 min-w-11;
   }
 
-  img {
-    display: block;
-  }
+  img { display: block; }
 
-  input,
-  select,
-  textarea {
-    @apply text-base;
-  }
+  input, select, textarea { @apply text-base; }
 
   :focus-visible {
-    outline: 2px solid rgba(184, 145, 58, 0.4);
+    outline: 1px solid rgba(201, 168, 76, 0.5);
     outline-offset: 3px;
   }
 
@@ -128,178 +101,74 @@
     @apply mx-auto max-w-6xl px-5 sm:px-6 lg:px-8;
   }
 
-  .page-shell {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-  }
-
-  .page-shell::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      linear-gradient(90deg, rgba(51, 35, 25, 0.04), transparent 19%, transparent 81%, rgba(51, 35, 25, 0.045)),
-      radial-gradient(ellipse at 50% 0%, rgba(248, 240, 229, 0.72), transparent 46rem);
-  }
-
-  .page-shell::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(circle at 106% 16%, transparent 0 18rem, var(--color-line-soft) 18rem 18.08rem, transparent 18.08rem),
-      radial-gradient(circle at -6% 52%, transparent 0 20rem, var(--color-line-soft) 20rem 20.08rem, transparent 20.08rem);
-  }
-
+  /* ── Hero ──────────────────────────────────────────── */
   .luxury-hero {
     position: relative;
     isolation: isolate;
-    min-height: calc(100vh - 72px);
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
   }
 
-  .luxury-hero::before,
-  .luxury-hero::after {
-    content: "";
+  .luxury-hero__bg {
     position: absolute;
+    inset: 0;
     z-index: -1;
-    pointer-events: none;
   }
 
-  .luxury-hero::before {
+  .luxury-hero__overlay {
+    position: absolute;
     inset: 0;
     background:
-      linear-gradient(110deg, rgba(248, 240, 229, 0.82) 0%, rgba(248, 240, 229, 0.56) 37%, rgba(220, 203, 183, 0.16) 100%),
-      radial-gradient(circle at 22% 22%, rgba(255, 250, 244, 0.78), transparent 25rem),
-      radial-gradient(circle at 80% 18%, rgba(127, 74, 36, 0.12), transparent 22rem);
+      linear-gradient(to top, rgba(13,12,11,0.96) 0%, rgba(13,12,11,0.55) 40%, rgba(13,12,11,0.18) 72%, transparent 100%),
+      linear-gradient(to right, rgba(13,12,11,0.4) 0%, transparent 55%);
   }
 
-  .luxury-hero::after {
-    right: clamp(-8rem, -8vw, -3rem);
-    bottom: -17rem;
-    width: min(48rem, 82vw);
-    aspect-ratio: 1;
-    border: 1px solid var(--color-line);
-    border-radius: 999px;
-    opacity: 0.88;
-  }
-
-  .luxury-hero > .container-shell { position: relative; }
-
-  .luxury-hero > .container-shell::before,
-  .luxury-hero > .container-shell::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  .luxury-hero > .container-shell::before {
-    left: -5rem;
-    top: 5rem;
-    width: 18rem;
-    height: 18rem;
-    border-top: 1px solid var(--color-line-soft);
-    border-left: 1px solid var(--color-line-soft);
-    border-top-left-radius: 18rem;
-  }
-
-  .luxury-hero > .container-shell::after {
-    right: 39%;
-    bottom: 0.5rem;
-    width: 9rem;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--color-line), transparent);
-  }
-
+  /* ── Section bands ─────────────────────────────────── */
   .section-band {
     position: relative;
     isolation: isolate;
-    overflow: hidden;
   }
 
-  .section-band::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(circle at 8% 18%, rgba(248, 240, 229, 0.72), transparent 23rem),
-      radial-gradient(circle at 91% 18%, rgba(143, 101, 76, 0.12), transparent 25rem);
+  .section-band--dark {
+    background: var(--color-bg);
   }
 
-  .section-band::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      linear-gradient(90deg, transparent 0 6%, var(--color-line-soft) 6% 6.05%, transparent 6.05% 100%),
-      radial-gradient(circle at 92% 82%, transparent 0 12rem, var(--color-line-soft) 12rem 12.07rem, transparent 12.07rem);
+  .section-band--lift {
+    background: var(--color-surface);
   }
 
-  .section-band--warm {
-    background:
-      linear-gradient(180deg, rgba(247, 240, 230, 0.58), rgba(232, 220, 205, 0.88)),
-      var(--color-bg);
+  .section-band--mid {
+    background: var(--color-surface-2);
   }
 
-  .section-band--stone {
-    background:
-      linear-gradient(135deg, rgba(220, 203, 183, 0.96), rgba(235, 223, 208, 0.74)),
-      var(--color-surface-offset);
+  /* ── Gold rule line ─────────────────────────────────── */
+  .gold-rule {
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--color-primary);
+    flex-shrink: 0;
   }
 
-  .booking-band {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background:
-      linear-gradient(180deg, rgba(247, 240, 230, 0.92), rgba(232, 220, 205, 0.92)),
-      var(--color-surface-2);
-  }
-
-  .booking-band::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(circle at 14% 26%, rgba(127, 74, 36, 0.1), transparent 23rem),
-      radial-gradient(circle at 88% 18%, rgba(93, 77, 60, 0.14), transparent 26rem),
-      linear-gradient(90deg, transparent 0 88%, var(--color-line-soft) 88% 88.06%, transparent 88.06% 100%);
-  }
-
-  .image-frame {
-    box-shadow: 0 0 0 1px rgba(255, 247, 239, 0.28) inset;
-  }
-
-  .logo-mark {
-    background: linear-gradient(180deg, rgba(127, 74, 36, 0.07), rgba(127, 74, 36, 0.02));
-  }
-
+  /* ── Nav ────────────────────────────────────────────── */
   .nav-link {
-    @apply relative inline-flex items-center font-body text-[12px] font-light uppercase tracking-[0.16em] text-text transition-colors duration-300;
+    @apply relative inline-flex items-center font-body text-[11px] font-light uppercase tracking-[0.18em] text-text/60 transition-colors duration-300 hover:text-text;
   }
 
   .nav-link::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -0.25rem;
+    bottom: -0.3rem;
     width: 100%;
     height: 1px;
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 300ms ease;
-    background: currentColor;
+    background: var(--color-primary);
   }
 
   .nav-link:hover::after,
@@ -307,7 +176,43 @@
     transform: scaleX(1);
   }
 
-  /* ─── Floating label underline field ─────────────────── */
+  /* ── Service card (dark) ─────────────────────────────── */
+  .service-card {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    padding: 2rem 1.75rem;
+    transition: border-color 400ms ease, box-shadow 400ms ease;
+  }
+
+  .service-card:hover {
+    border-color: rgba(201, 168, 76, 0.3);
+    box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.06) inset, var(--shadow-md);
+  }
+
+  /* ── Review card ─────────────────────────────────────── */
+  .review-card {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    padding: 2rem;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+
+  /* ── Image frame ─────────────────────────────────────── */
+  .image-frame {
+    box-shadow: 0 0 0 1px rgba(201,168,76,0.08) inset;
+  }
+
+  /* ── Booking band ────────────────────────────────────── */
+  .booking-band {
+    position: relative;
+    isolation: isolate;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* ── Floating label fields ───────────────────────────── */
   .float-field {
     position: relative;
     padding-top: 1.25rem;
@@ -320,7 +225,7 @@
     border: none;
     border-bottom: 1px solid var(--color-border);
     border-radius: 0;
-    padding: 0.5rem 0 0.5rem;
+    padding: 0.5rem 0;
     font-family: var(--font-jost), system-ui, sans-serif;
     font-size: 1rem;
     font-weight: 300;
@@ -336,7 +241,6 @@
     min-height: 120px;
   }
 
-  /* The growing underline */
   .float-field__line {
     position: absolute;
     bottom: 0;
@@ -355,7 +259,6 @@
     transform: scaleX(1);
   }
 
-  /* Floating label */
   .float-field > label {
     position: absolute;
     left: 0;
@@ -368,7 +271,6 @@
     transition: top 240ms ease, font-size 240ms ease, color 240ms ease, letter-spacing 240ms ease;
   }
 
-  /* Float up when input has content or is focused */
   .float-field__input:focus + label,
   .float-field__input:not(:placeholder-shown) + label,
   .float-field__select + label {
@@ -390,56 +292,39 @@
     font-weight: 300;
   }
 
-  /* Select always shows label floated because it always has a value */
-  .float-field__select {
-    cursor: pointer;
-  }
+  .float-field__select { cursor: pointer; }
 
-  /* ─────────────────────────────────────────────────────── */
-
+  /* ── Legacy field-base (booking form) ───────────────── */
   .field-base {
-    @apply min-h-12 w-full rounded-[2px] border border-border bg-surface-2 px-4 py-3 text-base font-light text-text placeholder:text-faint focus:border-primary focus:outline-none;
+    @apply min-h-12 w-full rounded-[1px] border border-border bg-surface-2 px-4 py-3 text-base font-light text-text placeholder:text-faint focus:border-primary focus:outline-none;
   }
 
-  .field-base:focus {
-    box-shadow: 0 0 0 3px rgba(184, 145, 58, 0.12);
-  }
-
+  /* ── Reviews scroll track ────────────────────────────── */
   .reviews-track {
     display: flex;
-    gap: 1rem;
+    gap: 1.25rem;
     overflow-x: auto;
     padding-bottom: 0.5rem;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
   }
 
-  .review-card {
-    scroll-snap-align: start;
-    flex-shrink: 0;
+  /* ── Section title ───────────────────────────────────── */
+  .section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    font-family: var(--font-jost), system-ui, sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 1.25rem;
   }
 
-  @media (max-width: 767px) {
-    body::after {
-      opacity: 0.42;
-      background:
-        radial-gradient(circle at 112% 14%, transparent 0 8rem, var(--color-line) 8rem 8.06rem, transparent 8.06rem),
-        radial-gradient(circle at -12% 72%, transparent 0 10rem, var(--color-line-soft) 10rem 10.06rem, transparent 10.06rem),
-        linear-gradient(180deg, transparent 0 64%, var(--color-line-soft) 64% 64.08%, transparent 64.08% 100%);
-    }
-
-    .luxury-hero > .container-shell::before {
-      left: -4rem;
-      top: 6rem;
-      width: 10rem;
-      height: 10rem;
-    }
-
-    .luxury-hero > .container-shell::after {
-      right: auto;
-      left: 1rem;
-      bottom: 5.5rem;
-      width: 6rem;
-    }
+  /* ── Logo mark ───────────────────────────────────────── */
+  .logo-mark {
+    background: rgba(201, 168, 76, 0.06);
   }
 }

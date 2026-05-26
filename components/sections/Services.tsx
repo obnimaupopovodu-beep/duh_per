@@ -3,27 +3,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-import ServiceCard from "@/components/ui/ServiceCard";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { SERVICE_DESCRIPTIONS, SERVICES } from "@/lib/constants";
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7 },
-  },
-};
 
 export default function Services() {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -32,9 +13,9 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="section-band px-5 py-24 sm:px-6 lg:px-8"
+      className="section-band section-band--dark px-5 py-28 sm:px-6 lg:px-8"
     >
-      <div className="container-shell space-y-12">
+      <div className="container-shell space-y-14">
         <SectionTitle
           eyebrow="Услуги"
           title="Что мы делаем"
@@ -43,22 +24,38 @@ export default function Services() {
 
         <motion.div
           ref={ref}
-          variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid gap-5 md:grid-cols-2 xl:grid-cols-4"
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+          className="grid gap-px bg-border md:grid-cols-2 xl:grid-cols-3"
         >
-          {SERVICES.slice(0, 6).map((service, index) => (
-            <motion.div
+          {SERVICES.slice(0, 6).map((service, i) => (
+            <motion.article
               key={service.id}
-              variants={itemVariants}
-              className={index === 0 ? "md:col-span-2 xl:col-span-2" : ""}
+              variants={{
+                hidden:  { opacity: 0, y: 16 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+              }}
+              className="service-card group flex flex-col justify-between gap-8"
             >
-              <ServiceCard
-                service={service}
-                description={SERVICE_DESCRIPTIONS[service.id]}
-              />
-            </motion.div>
+              {/* Number */}
+              <span className="font-body text-[10px] font-light uppercase tracking-[0.22em] text-primary/50">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              <div className="space-y-3">
+                <h3 className="font-display text-2xl font-light leading-tight text-text">
+                  {service.name}
+                </h3>
+                <p className="text-sm font-light leading-relaxed text-muted">
+                  {SERVICE_DESCRIPTIONS[service.id]}
+                </p>
+              </div>
+
+              <p className="font-body text-[11px] font-light uppercase tracking-[0.18em] text-primary">
+                {service.price}
+              </p>
+            </motion.article>
           ))}
         </motion.div>
       </div>

@@ -4,10 +4,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const advantages = [
-  { label: "Ежедневно до 23:00", note: "Режим работы" },
-  { label: "5.0 — лучший в районе", note: "Рейтинг" },
-  { label: "Кофе и чай в подарок", note: "Атмосфера" },
-  { label: "Индивидуальный подход", note: "Мастера" },
+  { value: "Ежедневно до 23:00", label: "Режим работы" },
+  { value: "5.0 рейтинг",        label: "Лучший в районе" },
+  { value: "Кофе и чай",         label: "Комплимент" },
+  { value: "Персональный подход",label: "Каждому гостю" },
 ];
 
 export default function Advantages() {
@@ -17,33 +17,37 @@ export default function Advantages() {
   return (
     <section
       id="advantages"
-      className="section-band section-band--stone px-5 py-20 sm:px-6 lg:px-8"
+      className="section-band section-band--mid px-5 py-0 sm:px-6 lg:px-8"
     >
-      <div
-        ref={ref}
-        className="container-shell"
-      >
-        <div className="grid grid-cols-2 divide-x divide-y divide-[var(--color-line-soft)] border border-[var(--color-line-soft)] xl:grid-cols-4 xl:divide-y-0">
-          {advantages.map((item, index) => (
+      <div ref={ref} className="container-shell">
+        {/* Horizontal rule at top */}
+        <div className="h-px w-full bg-border" />
+
+        <div className="grid grid-cols-2 xl:grid-cols-4">
+          {advantages.map((item, i) => (
             <motion.div
-              key={item.label}
+              key={item.value}
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
-              transition={{
-                duration: 0.9,
-                delay: index * 0.12,
-              }}
-              className="flex flex-col justify-between px-8 py-10 xl:px-10"
+              transition={{ duration: 1, delay: i * 0.1, ease: "easeOut" }}
+              className={`flex flex-col gap-4 py-12 ${
+                i < advantages.length - 1
+                  ? "border-r border-border xl:border-r"
+                  : ""
+              } px-8 xl:px-10`}
             >
-              <p className="font-body text-[10px] font-light uppercase tracking-[0.2em] text-muted">
-                {item.note}
-              </p>
-              <p className="mt-6 font-display text-xl font-light italic leading-snug text-text">
+              <p className="font-body text-[9px] font-light uppercase tracking-[0.24em] text-primary/60">
                 {item.label}
+              </p>
+              <p className="font-display text-xl font-light italic leading-tight text-text">
+                {item.value}
               </p>
             </motion.div>
           ))}
         </div>
+
+        {/* Rule at bottom */}
+        <div className="h-px w-full bg-border" />
       </div>
     </section>
   );

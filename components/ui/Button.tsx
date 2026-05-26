@@ -1,41 +1,36 @@
-import type { ReactNode } from "react";
+import { type AnchorHTMLAttributes, type ButtonHTMLAttributes } from "react";
 
-type ButtonProps = {
-  children: ReactNode;
+type BaseProps = {
+  variant?: "primary" | "ghost";
+  children: React.ReactNode;
   className?: string;
-  href?: string;
-  type?: "button" | "submit" | "reset";
-  variant?: "primary" | "outline";
-  disabled?: boolean;
 };
+
+type ButtonProps  = BaseProps & ButtonHTMLAttributes<HTMLButtonElement> & { href?: never };
+type AnchorProps  = BaseProps & AnchorHTMLAttributes<HTMLAnchorElement>  & { href: string };
+type Props = ButtonProps | AnchorProps;
 
 const variants = {
   primary:
-    "border border-primary/60 bg-transparent text-primary hover:bg-primary hover:text-inverse hover:border-primary",
-  outline:
-    "border border-primary/40 text-primary bg-primary/5 hover:bg-primary hover:text-inverse hover:border-primary",
+    "border border-primary/70 bg-transparent text-primary hover:bg-primary hover:text-inverse",
+  ghost:
+    "border border-border text-text/60 hover:border-text/30 hover:text-text",
 };
 
-export default function Button({
-  children,
-  className = "",
-  href,
-  type = "button",
-  variant = "primary",
-  disabled = false,
-}: ButtonProps) {
-  const classes = `inline-flex min-h-12 items-center justify-center rounded-[2px] px-7 py-3 font-body text-[13px] font-light uppercase tracking-[0.18em] transition-all duration-300 ${variants[variant]} ${disabled ? "cursor-not-allowed opacity-60" : ""} ${className}`;
+const base =
+  "inline-flex items-center justify-center px-7 py-3 font-body text-[11px] font-light uppercase tracking-[0.18em] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary";
 
+export default function Button({ variant = "primary", children, className = "", href, ...rest }: Props) {
+  const cls = `${base} ${variants[variant]} ${className}`;
   if (href) {
     return (
-      <a href={href} className={classes}>
+      <a href={href} className={cls} {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}>
         {children}
       </a>
     );
   }
-
   return (
-    <button type={type} className={classes} disabled={disabled}>
+    <button className={cls} {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}>
       {children}
     </button>
   );
