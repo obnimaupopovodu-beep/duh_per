@@ -58,7 +58,8 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    opacity: 0.18;
+    opacity: 0.11;
+    mix-blend-mode: multiply;
     background-image:
       linear-gradient(rgba(51, 35, 25, 0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(51, 35, 25, 0.022) 1px, transparent 1px);
@@ -108,7 +109,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid rgba(184, 145, 58, 0.65);
+    outline: 2px solid rgba(184, 145, 58, 0.4);
     outline-offset: 3px;
   }
 
@@ -285,7 +286,6 @@
 
   .image-frame {
     box-shadow:
-      0 28px 80px rgba(51, 35, 25, 0.19),
       0 0 0 1px rgba(255, 247, 239, 0.28) inset;
   }
 
@@ -294,7 +294,7 @@
   }
 
   .nav-link {
-    @apply relative inline-flex items-center font-body text-[13px] font-medium uppercase tracking-[0.12em] text-text transition-colors duration-200;
+    @apply relative inline-flex items-center font-body text-[12px] font-light uppercase tracking-[0.16em] text-text transition-colors duration-300;
   }
 
   .nav-link::after {
@@ -306,7 +306,7 @@
     height: 1px;
     transform: scaleX(0);
     transform-origin: left center;
-    transition: transform 200ms ease;
+    transition: transform 300ms ease;
     background: currentColor;
   }
 
@@ -316,11 +316,11 @@
   }
 
   .field-base {
-    @apply min-h-12 w-full rounded-md border border-border bg-surface-2 px-4 py-3 text-base text-text placeholder:text-faint focus:border-primary focus:outline-none;
+    @apply min-h-12 w-full rounded-[2px] border border-border bg-surface-2 px-4 py-3 text-base font-light text-text placeholder:text-faint focus:border-primary focus:outline-none;
   }
 
   .field-base:focus {
-    box-shadow: 0 0 0 3px rgba(184, 145, 58, 0.15);
+    box-shadow: 0 0 0 3px rgba(184, 145, 58, 0.12);
   }
 
   .reviews-track {

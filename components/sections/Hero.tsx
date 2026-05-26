@@ -15,7 +15,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="luxury-hero flex items-center overflow-hidden py-10"
+      className="luxury-hero flex items-center overflow-hidden py-10 md:py-16"
     >
       <div className="container-shell">
         <div
@@ -23,20 +23,20 @@ export default function Hero() {
           className="grid items-center gap-10 md:grid-cols-[55fr_45fr] md:gap-14"
         >
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="space-y-7"
           >
-            <p className="font-body text-[13px] uppercase tracking-[0.14em] text-muted">
+            <p className="font-body text-[11px] font-light uppercase tracking-[0.2em] text-muted">
               Премиальный салон красоты в центре Москвы
             </p>
             <div className="space-y-5">
-              <h1 className="font-display text-[clamp(3.5rem,8vw,7rem)] font-light leading-[0.92]">
+              <h1 className="font-display text-[clamp(3.5rem,8vw,7rem)] font-light leading-[0.92] tracking-[-0.01em]">
                 <span className="block not-italic">Искусство</span>
                 <span className="block italic">быть красивой</span>
               </h1>
-              <p className="max-w-xl text-base text-muted">
+              <p className="max-w-xl text-base font-light leading-relaxed text-muted">
                 Пространство тёплого минимализма на Тульской, где стрижка,
                 окрашивание и уход становятся тихим ритуалом для себя.
               </p>
@@ -45,11 +45,11 @@ export default function Hero() {
               <Button href="#booking" variant="primary">
                 Записаться на приём
               </Button>
-              <p className="text-sm text-muted">
+              <p className="text-sm font-light text-muted">
                 Артур и команда встречают вас ежедневно до 23:00.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3 text-sm text-muted">
+            <div className="flex flex-wrap gap-3 font-body text-[11px] font-light uppercase tracking-[0.14em] text-muted">
               <span>5.0 рейтинг</span>
               <span aria-hidden="true">·</span>
               <span>412 оценок</span>
@@ -59,10 +59,10 @@ export default function Hero() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="image-frame relative min-h-[420px] overflow-hidden rounded-[30px] bg-surface-off"
+            transition={{ duration: 0.9, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+            className="image-frame relative min-h-[420px] overflow-hidden rounded-[4px] bg-surface-off"
           >
             {/* TODO: заменить на реальное фото интерьера */}
             <Image

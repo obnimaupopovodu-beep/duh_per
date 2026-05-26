@@ -4,10 +4,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const advantages = [
-  "Работаем ежедневно до 23:00",
-  "Рейтинг 5.0 — лучший в районе",
-  "Кофе, чай и уют в подарок",
-  "Мастера с индивидуальным подходом",
+  { label: "Ежедневно до 23:00", note: "Режим работы" },
+  { label: "5.0 — лучший в районе", note: "Рейтинг" },
+  { label: "Кофе и чай в подарок", note: "Атмосфера" },
+  { label: "Индивидуальный подход", note: "Мастера" },
 ];
 
 export default function Advantages() {
@@ -21,25 +21,29 @@ export default function Advantages() {
     >
       <div
         ref={ref}
-        className="container-shell grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
+        className="container-shell"
       >
-        {advantages.map((text, index) => (
-          <motion.article
-            key={text}
-            initial={{ opacity: 0, y: 24 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{
-              duration: 0.7,
-              delay: index * 0.08,
-            }}
-            className="rounded-[18px] border border-white/45 bg-surface/65 p-6 shadow-md backdrop-blur-sm"
-          >
-            <p className="font-display text-6xl font-light text-primary">
-              {String(index + 1).padStart(2, "0")}
-            </p>
-            <p className="mt-6 max-w-[16rem] text-base text-text">{text}</p>
-          </motion.article>
-        ))}
+        <div className="grid grid-cols-2 divide-x divide-y divide-[var(--color-line-soft)] border border-[var(--color-line-soft)] xl:grid-cols-4 xl:divide-y-0">
+          {advantages.map((item, index) => (
+            <motion.div
+              key={item.label}
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{
+                duration: 0.9,
+                delay: index * 0.12,
+              }}
+              className="flex flex-col justify-between px-8 py-10 xl:px-10"
+            >
+              <p className="font-body text-[10px] font-light uppercase tracking-[0.2em] text-muted">
+                {item.note}
+              </p>
+              <p className="mt-6 font-display text-xl font-light italic leading-snug text-text">
+                {item.label}
+              </p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
