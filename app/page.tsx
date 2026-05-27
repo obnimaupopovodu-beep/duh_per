@@ -7,6 +7,7 @@ import Contacts from "@/components/sections/Contacts";
 import Hero from "@/components/sections/Hero";
 import Reviews from "@/components/sections/Reviews";
 import Services from "@/components/sections/Services";
+import { BookingAmbientDecor } from "@/components/ui/SectionVisuals";
 
 export default function Home() {
   return (
@@ -20,9 +21,10 @@ export default function Home() {
         <Reviews />
         <section
           id="booking"
-          className="booking-band scroll-mt-28 border-t border-border/70 px-5 py-20 sm:px-6 lg:px-8"
+          className="booking-band relative overflow-hidden scroll-mt-28 border-t border-border/70 px-5 py-20 sm:px-6 lg:px-8"
         >
-          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <BookingAmbientDecor />
+          <div className="relative z-10 mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
             <Contacts />
             <BookingForm />
           </div>

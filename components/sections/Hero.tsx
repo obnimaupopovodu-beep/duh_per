@@ -36,7 +36,7 @@ export default function Hero() {
       <div className="luxury-hero__overlay" />
 
       {/* Content — pinned to bottom */}
-      <div className="container-shell relative z-10 pb-16 pt-40">
+      <div className="container-shell relative z-10 pb-14 pt-36 sm:pb-16 sm:pt-40">
         <div className="max-w-3xl">
           {/* Eyebrow */}
           <motion.p
@@ -54,10 +54,10 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display text-[clamp(3.6rem,9vw,8.5rem)] font-light leading-[0.9] tracking-[-0.02em] text-text"
+            className="font-display text-[clamp(2.7rem,9vw,8.5rem)] font-light leading-[0.92] tracking-[-0.02em] text-text"
           >
             <span className="block">Искусство</span>
-            <span className="block italic text-text/80">быть красивой</span>
+            <span className="block text-text/75">быть красивой</span>
           </motion.h1>
 
           {/* Sub + CTA */}
@@ -65,9 +65,9 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between"
+            className="mt-9 flex flex-col gap-7 sm:mt-10 sm:flex-row sm:items-end sm:justify-between"
           >
-            <p className="max-w-xs text-sm font-light leading-relaxed text-text/60">
+            <p className="max-w-md text-base font-light leading-relaxed text-text/72 md:text-lg">
               Пространство тёплого минимализма на Тульской. Стрижка, окрашивание и уход — тихий ритуал для себя.
             </p>
             <Button href="#booking" variant="primary">

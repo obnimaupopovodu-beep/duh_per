@@ -32,11 +32,11 @@ export default function ReviewCard({ author, text }: ReviewCardProps) {
       className="review-card w-[85vw] max-w-sm rounded-lg border border-border/80 border-t-2 border-t-primary bg-surface-2 p-6 shadow-sm md:w-auto md:max-w-none"
     >
       <div className="space-y-5">
-        <p className="font-display text-2xl font-light italic leading-snug text-text">
+        <p className="font-display text-xl font-light leading-relaxed text-text/80 md:text-2xl">
           {text}
         </p>
         <Stars />
-        <p className="font-body text-sm uppercase tracking-[0.12em] text-muted">
+        <p className="font-body text-base font-light uppercase tracking-[0.12em] text-muted">
           {author}
         </p>
       </div>

@@ -101,15 +101,15 @@ export default function BookingForm() {
               <div className="flex h-14 w-14 items-center justify-center rounded-[2px] border border-[var(--color-line)] text-primary">
                 <Check size={24} />
               </div>
-              <h3 className="mt-6 font-display text-4xl font-light italic">
+              <h3 className="mt-6 font-display text-4xl font-light">
                 Ваша заявка принята
               </h3>
-              <p className="mt-4 max-w-md text-muted">
+              <p className="mt-4 max-w-md text-base leading-relaxed text-muted md:text-lg">
                 {submittedName ? `${submittedName}, ` : ""}
                 мы свяжемся с вами в ближайшее время, чтобы подтвердить запись и
                 подобрать удобное окно.
               </p>
-              <Button type="button" variant="outline" className="mt-8" href="#top">
+              <Button type="button" variant="ghost" className="mt-8" href="#top">
                 Вернуться наверх
               </Button>
             </motion.div>
@@ -183,7 +183,7 @@ export default function BookingForm() {
               </FloatField>
 
               {status === "error" ? (
-                <p className="border border-[var(--color-line)] px-4 py-3 text-sm text-text">
+                <p className="border border-[var(--color-line)] px-4 py-3 text-base leading-relaxed text-text">
                   Не удалось отправить заявку. Позвоните нам напрямую:
                   +7 (926) 153-23-43.
                 </p>

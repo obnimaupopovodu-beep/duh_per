@@ -5,8 +5,10 @@ import Image from "next/image";
 import { useRef } from "react";
 
 import SectionTitle from "@/components/ui/SectionTitle";
+import { AboutAmbientDecor } from "@/components/ui/SectionVisuals";
 
 import outsideLogoImage from "@/img/logofromoutside.webp";
+import hairstyle3Img from "@/img/hairstyle3.webp";
 
 export default function About() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -20,11 +22,12 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="section-band section-band--lift px-5 py-28 sm:px-6 lg:px-8"
+      className="section-band section-band--lift relative overflow-hidden px-5 py-28 sm:px-6 lg:px-8"
     >
+      <AboutAmbientDecor />
       <div
         ref={inViewRef}
-        className="container-shell grid gap-16 md:grid-cols-[55fr_45fr] md:items-center"
+        className="container-shell relative z-10 grid gap-16 md:grid-cols-[55fr_45fr] md:items-center"
       >
         {/* Text */}
         <motion.div
@@ -39,7 +42,7 @@ export default function About() {
             description="Art of Paradise вырос из простой идеи: премиальный сервис может быть тихим, искренним и очень человеческим."
           />
 
-          <div className="space-y-5 text-sm font-light leading-relaxed text-muted">
+          <div className="space-y-5 text-base font-light leading-relaxed text-muted md:text-lg">
             <p>
               Я хотел создать место, куда хочется возвращаться не только за результатом,
               но и за ощущением покоя. Поэтому у нас всё строится вокруг внимания
@@ -54,7 +57,7 @@ export default function About() {
 
           {/* Blockquote */}
           <blockquote className="border-l border-primary/50 pl-6">
-            <p className="font-display text-2xl font-light italic leading-snug text-text/80 md:text-3xl">
+            <p className="font-display text-2xl font-light leading-snug text-text/80 md:text-3xl">
               Мы создали пространство, где вы чувствуете себя, как дома — только ещё красивее.
             </p>
             <footer className="mt-4 font-body text-[10px] uppercase tracking-[0.2em] text-primary/70">
@@ -68,20 +71,32 @@ export default function About() {
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-          className="relative min-h-[480px] overflow-hidden image-frame"
+          className="relative min-h-[480px] image-frame"
         >
-          <motion.div style={{ y: yImg }} className="absolute inset-[-8%] will-change-transform">
-            <Image
-              src={outsideLogoImage}
-              alt="Вывеска и входная зона салона Art of Paradise"
-              fill
-              sizes="(max-width: 768px) 100vw, 42vw"
-              className="object-cover"
-            />
-          </motion.div>
+          <div className="absolute inset-0 overflow-hidden">
+            <motion.div style={{ y: yImg }} className="absolute inset-[-8%] will-change-transform">
+              <Image
+                src={outsideLogoImage}
+                alt="Вывеска и входная зона салона Art of Paradise"
+                fill
+                sizes="(max-width: 768px) 100vw, 42vw"
+                className="object-cover"
+              />
+            </motion.div>
+          </div>
           {/* Gold corner accent */}
           <div className="pointer-events-none absolute left-0 top-0 h-12 w-px bg-gradient-to-b from-primary/60 to-transparent" />
           <div className="pointer-events-none absolute left-0 top-0 h-px w-12 bg-gradient-to-r from-primary/60 to-transparent" />
+          <div className="pointer-events-none absolute -bottom-3 -left-3 z-[1] hidden h-32 w-[8.75rem] overflow-hidden rounded-sm border border-primary/20 shadow-xl md:block">
+            <Image
+              src={hairstyle3Img}
+              alt=""
+              width={176}
+              height={256}
+              className="h-full w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          </div>
         </motion.div>
       </div>
     </section>

@@ -46,11 +46,11 @@ export default function Contacts() {
                     {item.label}
                   </p>
                   {item.href ? (
-                    <a href={item.href} className="mt-1.5 block text-sm text-text transition-colors hover:text-primary">
+                    <a href={item.href} className="mt-1.5 block text-base text-text transition-colors hover:text-primary">
                       {item.value}
                     </a>
                   ) : (
-                    <p className="mt-1.5 text-sm text-text">{item.value}</p>
+                    <p className="mt-1.5 text-base leading-relaxed text-text">{item.value}</p>
                   )}
                 </div>
               </div>
@@ -80,7 +80,7 @@ export default function Contacts() {
         <div className="flex items-center justify-between gap-4 bg-surface px-5 py-4">
           <div>
             <p className="font-body text-[9px] font-light uppercase tracking-[0.22em] text-primary/60">Яндекс.Карты</p>
-            <p className="mt-1 text-sm font-light text-text">Открыть маршрут до салона</p>
+            <p className="mt-1 text-base font-light leading-relaxed text-text">Открыть маршрут до салона</p>
           </div>
           <Compass size={16} strokeWidth={1.5} className="shrink-0 text-muted transition-colors duration-300 group-hover:text-primary" />
         </div>

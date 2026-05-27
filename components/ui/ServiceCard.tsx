@@ -24,7 +24,7 @@ export default function ServiceCard({
           <h3 className="font-display text-3xl font-medium leading-tight text-text">
             {service.name}
           </h3>
-          <p className="max-w-sm text-sm text-muted">{description}</p>
+          <p className="max-w-sm text-base leading-relaxed text-muted">{description}</p>
         </div>
         <p className="font-body text-[13px] font-medium uppercase tracking-[0.12em] text-primary">
           {service.price}

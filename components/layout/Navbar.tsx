@@ -17,6 +17,7 @@ const links = [
 export default function Navbar() {
   const [isOpen,   setIsOpen]   = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuId = "mobile-main-menu";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -30,11 +31,20 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen]);
+
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "border-b border-border/60 bg-bg/90 backdrop-blur-lg"
+          ? "border-b border-border/60 bg-bg/90 shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-lg"
           : "border-b border-transparent bg-transparent"
       }`}
     >
@@ -64,6 +74,7 @@ export default function Navbar() {
           type="button"
           aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
           aria-expanded={isOpen}
+          aria-controls={menuId}
           onClick={() => setIsOpen((p) => !p)}
           className="inline-flex items-center justify-center border border-border/60 bg-surface/80 p-2.5 text-text md:hidden"
         >
@@ -77,6 +88,7 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            id={menuId}
             className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm md:hidden"
             onClick={() => setIsOpen(false)}
           >

@@ -27,8 +27,10 @@
     --color-dark-surface: #141210;
     --color-dark-text:    #e8e0d4;
 
-    --color-line:      rgba(201, 168, 76, 0.10);
-    --color-line-soft: rgba(201, 168, 76, 0.05);
+    --color-line:      rgba(143, 107, 34, 0.18);
+    --color-line-soft: rgba(108, 81, 28, 0.10);
+    --color-shape:     rgba(64, 44, 18, 0.24);
+    --color-shape-soft: rgba(43, 29, 12, 0.14);
 
     --radius-sm: 1px;
     --radius-md: 2px;
@@ -47,21 +49,45 @@
   }
 
   body {
-    @apply font-body text-base font-light leading-relaxed text-text;
+    @apply font-body text-[1.0625rem] font-light leading-relaxed text-text;
     background-color: var(--color-bg);
     min-width: 320px;
   }
 
-  /* Grain overlay */
+  /* Subtle paper grain */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    opacity: 0.025;
+    opacity: 0.03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
     background-size: 200px 200px;
+  }
+
+  /* Fine cross-hatch instead of a grid */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.16;
+    background-image:
+      repeating-linear-gradient(
+        115deg,
+        transparent 0 12px,
+        rgba(201, 168, 76, 0.018) 12px 13px,
+        transparent 13px 28px
+      ),
+      repeating-linear-gradient(
+        155deg,
+        transparent 0 16px,
+        rgba(232, 224, 212, 0.012) 16px 17px,
+        transparent 17px 36px
+      );
+    mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%);
   }
 
   ::selection {
@@ -79,7 +105,9 @@
 
   img { display: block; }
 
-  input, select, textarea { @apply text-base; }
+  input, select, textarea {
+    @apply text-lg font-light;
+  }
 
   :focus-visible {
     outline: 1px solid rgba(201, 168, 76, 0.5);
@@ -185,6 +213,7 @@
   .service-card {
     border: 1px solid var(--color-border);
     background: var(--color-surface);
+    border-radius: 2px;
     padding: 2rem 1.75rem;
     transition: border-color 400ms ease, box-shadow 400ms ease;
   }
@@ -198,6 +227,7 @@
   .review-card {
     border: 1px solid var(--color-border);
     background: var(--color-surface);
+    border-radius: 2px;
     padding: 2rem;
     scroll-snap-align: start;
     flex-shrink: 0;
@@ -232,7 +262,7 @@
     border-radius: 0;
     padding: 0.5rem 0;
     font-family: var(--font-jost), system-ui, sans-serif;
-    font-size: 1rem;
+    font-size: 1.0625rem;
     font-weight: 300;
     color: var(--color-text);
     outline: none;
@@ -269,7 +299,7 @@
     left: 0;
     top: 1.75rem;
     font-family: var(--font-jost), system-ui, sans-serif;
-    font-size: 1rem;
+    font-size: 1.0625rem;
     font-weight: 300;
     color: var(--color-text-muted);
     pointer-events: none;
@@ -301,7 +331,7 @@
 
   /* ── Legacy field-base ───────────────────────────────────── */
   .field-base {
-    @apply min-h-12 w-full rounded-sm border border-border bg-surface-2 px-4 py-3 text-base font-light text-text placeholder:text-faint focus:border-primary focus:outline-none;
+    @apply min-h-12 w-full rounded-sm border border-border bg-surface-2 px-4 py-3 text-lg font-light text-text placeholder:text-faint focus:border-primary focus:outline-none;
   }
 
   /* ── Reviews scroll track ────────────────────────────────── */
@@ -312,6 +342,102 @@
     padding-bottom: 0.5rem;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── Services horizontal gallery ─────────────────────────── */
+  .services-track {
+    display: flex;
+    gap: 1.4rem;
+    overflow-x: auto;
+    padding: 0.25rem 0 0.9rem;
+    scroll-behavior: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+  }
+
+  .services-track > * {
+    scroll-snap-align: start;
+  }
+
+  .services-track::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .services-track::-webkit-scrollbar-track {
+    background: rgba(201, 168, 76, 0.06);
+  }
+
+  .services-track::-webkit-scrollbar-thumb {
+    background: rgba(201, 168, 76, 0.32);
+    border-radius: 999px;
+  }
+
+  .service-tile {
+    width: min(88vw, 24rem);
+    flex: 0 0 auto;
+    border: 1px solid rgba(201, 168, 76, 0.22);
+    background: linear-gradient(180deg, rgba(20, 18, 16, 0.95), rgba(13, 12, 11, 0.98));
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.03) inset, var(--shadow-md);
+  }
+
+  .service-tile__media {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+  }
+
+  .service-tile__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(13,12,11,0.95) 0%, rgba(13,12,11,0.25) 55%, rgba(13,12,11,0.05) 100%),
+      radial-gradient(circle at 50% 25%, rgba(201,168,76,0.10), transparent 55%);
+  }
+
+  .service-tile__content {
+    position: relative;
+    padding: 1.5rem 1.5rem 1.75rem;
+  }
+
+  .service-tile__icon {
+    position: absolute;
+    left: 50%;
+    top: -22px;
+    transform: translateX(-50%);
+    height: 44px;
+    width: 44px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    color: rgba(201, 168, 76, 0.9);
+    background: rgba(13, 12, 11, 0.55);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    backdrop-filter: blur(10px);
+  }
+
+  @media (min-width: 768px) {
+    .service-tile {
+      width: 24rem;
+    }
+    .service-tile__media {
+      height: 270px;
+    }
+  }
+
+  .reviews-track::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .reviews-track::-webkit-scrollbar-track {
+    background: rgba(201, 168, 76, 0.06);
+  }
+
+  .reviews-track::-webkit-scrollbar-thumb {
+    background: rgba(201, 168, 76, 0.35);
+    border-radius: 999px;
   }
 
   /* ── Section eyebrow ─────────────────────────────────────── */
