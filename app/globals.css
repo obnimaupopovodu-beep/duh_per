@@ -129,7 +129,7 @@
     @apply mx-auto max-w-6xl px-5 sm:px-6 lg:px-8;
   }
 
-  /* ── Hero ────────────────────────────────────────────────── */
+  /* ── Hero ─────────────────────────────────────────────────── */
   .luxury-hero {
     position: relative;
     isolation: isolate;
@@ -154,13 +154,13 @@
       linear-gradient(to right, rgba(13,12,11,0.4) 0%, transparent 55%);
   }
 
-  /* ── Section bands ───────────────────────────────────────── */
+  /* ── Section bands ─────────────────────────────────────────────── */
   .section-band           { position: relative; isolation: isolate; }
   .section-band--dark     { background: var(--color-bg); }
   .section-band--lift     { background: var(--color-surface); }
   .section-band--mid      { background: var(--color-surface-2); }
 
-  /* ── Gold rule ────────────────────────────────────────────── */
+  /* ── Gold rule ──────────────────────────────────────────────────── */
   .gold-rule {
     display: block;
     width: 40px;
@@ -169,7 +169,7 @@
     flex-shrink: 0;
   }
 
-  /* ── Nav link ─────────────────────────────────────────────── */
+  /* ── Nav link (original, dark bg) ─────────────────────────────── */
   .nav-link {
     position: relative;
     display: inline-flex;
@@ -198,7 +198,49 @@
   .nav-link:hover::after,
   .nav-link:focus-visible::after { transform: scaleX(1); }
 
-  /* ── Service card (grid variant) ─────────────────────────── */
+  /*
+   * ── Nav link blend (auto-inversion via mix-blend-mode: difference) ───────
+   *
+   * Parent <nav> has mix-blend-mode: difference applied inline.
+   * This class forces the link text to pure white (#fff).
+   *
+   * How difference blend works per-pixel:
+   *   result = |background - foreground|
+   *   white(255,255,255) on dark(~13,12,11) → ≈16,243,244 (stays light)
+   *   white(255,255,255) on light(~240,237,232) → ≈15,18,23  (becomes dark)
+   *
+   * This is continuous, GPU-driven, and requires zero JS.            ───────
+   */
+  .nav-link-blend {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-jost), system-ui, sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    /* Must be pure white for difference to invert correctly */
+    color: #ffffff;
+    text-decoration: none;
+  }
+  /* Underline indicator (also white, blends with parent) */
+  .nav-link-blend::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.3rem;
+    width: 100%;
+    height: 1px;
+    background: #ffffff;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 300ms ease;
+  }
+  .nav-link-blend:hover::after,
+  .nav-link-blend:focus-visible::after { transform: scaleX(1); }
+
+  /* ── Service card (grid variant) ───────────────────────────────── */
   .service-card {
     border: 1px solid var(--color-border);
     background: var(--color-surface);
@@ -211,7 +253,7 @@
     box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.06) inset, var(--shadow-md);
   }
 
-  /* ── Review card ─────────────────────────────────────────── */
+  /* ── Review card ─────────────────────────────────────────────── */
   .review-card {
     border: 1px solid var(--color-border);
     background: var(--color-surface);
@@ -221,12 +263,12 @@
     flex-shrink: 0;
   }
 
-  /* ── Image frame ─────────────────────────────────────────── */
+  /* ── Image frame ─────────────────────────────────────────────── */
   .image-frame {
     box-shadow: 0 0 0 1px rgba(201,168,76,0.08) inset;
   }
 
-  /* ── Booking band ────────────────────────────────────────── */
+  /* ── Booking band ────────────────────────────────────────────── */
   .booking-band {
     position: relative;
     isolation: isolate;
@@ -235,7 +277,7 @@
     border-bottom: 1px solid var(--color-border);
   }
 
-  /* ── Floating label fields ───────────────────────────────── */
+  /* ── Floating label fields ───────────────────────────────────── */
   .float-field { position: relative; padding-top: 1.25rem; }
   .float-field__input {
     display: block;
@@ -295,12 +337,12 @@
   }
   .float-field__select { cursor: pointer; }
 
-  /* ── Legacy field-base ───────────────────────────────────── */
+  /* ── Legacy field-base ─────────────────────────────────────────── */
   .field-base {
     @apply min-h-12 w-full rounded-sm border border-border bg-surface-2 px-4 py-3 text-lg font-light text-text placeholder:text-faint focus:border-primary focus:outline-none;
   }
 
-  /* ── Reviews scroll track ────────────────────────────────── */
+  /* ── Reviews scroll track ─────────────────────────────────────── */
   .reviews-track {
     display: flex;
     gap: 1.25rem;
@@ -313,7 +355,7 @@
   .reviews-track::-webkit-scrollbar-track  { background: rgba(201,168,76,0.06); }
   .reviews-track::-webkit-scrollbar-thumb  { background: rgba(201,168,76,0.35); border-radius: 999px; }
 
-  /* ── Services horizontal gallery ────────────────────────── */
+  /* ── Services horizontal gallery ────────────────────────────── */
 
   /* Outer clip: hides overflow, receives pointer events */
   .services-viewport {
@@ -390,7 +432,7 @@
     .service-tile__media { height: 270px; }
   }
 
-  /* ── Section eyebrow ─────────────────────────────────────── */
+  /* ── Section eyebrow ───────────────────────────────────────────── */
   .section-eyebrow {
     display: flex;
     align-items: center;
@@ -404,7 +446,7 @@
     margin-bottom: 1.25rem;
   }
 
-  /* ── Logo mark ───────────────────────────────────────────── */
+  /* ── Logo mark ───────────────────────────────────────────────────── */
   .logo-mark {
     background: rgba(201, 168, 76, 0.06);
   }
