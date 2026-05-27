@@ -19,140 +19,135 @@ import manicure3Img from "@/img/manicure3.webp";
 
 const serviceMedia = {
   "haircut-female": hairstyleImg,
-  coloring: hairstyle1Img,
-  "haircut-male": hairstyle2Img,
-  manicure: manicureImg,
-  gel: manicure3Img,
-  pedicure: hairstyle4Img,
+  coloring:         hairstyle1Img,
+  "haircut-male":   hairstyle2Img,
+  manicure:         manicureImg,
+  gel:              manicure3Img,
+  pedicure:         hairstyle4Img,
 } as const;
 
 const serviceIcons = {
   "haircut-female": Scissors,
-  coloring: Brush,
-  "haircut-male": SprayCan,
-  manicure: Hand,
-  gel: Sparkles,
-  pedicure: Footprints,
+  coloring:         Brush,
+  "haircut-male":   SprayCan,
+  manicure:         Hand,
+  gel:              Sparkles,
+  pedicure:         Footprints,
 } as const;
+
+// Easing: how fast current chases target (0 = instant, 1 = never)
+// 0.07 gives a silky ~400ms feel at 60 fps
+const LERP_FACTOR = 0.07;
+// Auto-drift speed (px/frame) when page is idle
+const AUTO_DRIFT_PX = 0.22;
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-10%" });
-  const lastPageScrollAtRef = useRef(0);
+  const trackRef   = useRef<HTMLDivElement | null>(null);
+  const isInView   = useInView(sectionRef, { once: true, margin: "-10%" });
+
+  // Refs that drive the animation loop — no re-renders needed
+  const currentRef         = useRef(0);   // rendered scrollLeft
+  const targetRef          = useRef(0);   // desired scrollLeft
   const userInteractingRef = useRef(false);
-  const interactionTimeoutRef = useRef<number | null>(null);
+  const pauseTimerRef      = useRef<number | null>(null);
+  const rafRef             = useRef<number>(0);
 
-  const syncTrackToProgress = (progress: number) => {
-    const track = trackRef.current;
-    if (!track) {
-      return;
-    }
-
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    if (maxScroll <= 0) {
-      return;
-    }
-
-    track.scrollTo({
-      left: Math.max(0, Math.min(maxScroll, progress * maxScroll)),
-      behavior: "auto",
-    });
-  };
-
-  const startInteractionPause = () => {
+  /** Call whenever the user touches / wheels the track */
+  const pauseSync = () => {
     userInteractingRef.current = true;
-
-    if (interactionTimeoutRef.current !== null) {
-      window.clearTimeout(interactionTimeoutRef.current);
-    }
-
-    interactionTimeoutRef.current = window.setTimeout(() => {
+    if (pauseTimerRef.current !== null) window.clearTimeout(pauseTimerRef.current);
+    pauseTimerRef.current = window.setTimeout(() => {
       userInteractingRef.current = false;
-      lastPageScrollAtRef.current = performance.now();
+      // Snap target to current so drift resumes from where user left off
+      targetRef.current = currentRef.current;
     }, 1200);
   };
 
+  /** Compute target scrollLeft from vertical page progress */
+  const targetFromScroll = (): number | null => {
+    const section = sectionRef.current;
+    const track   = trackRef.current;
+    if (!section || !track) return null;
+
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (maxScroll <= 0) return null;
+
+    const vh        = window.innerHeight;
+    const secTop    = section.getBoundingClientRect().top + window.scrollY;
+    const secHeight = section.offsetHeight;
+    // Section scrolls horizontally while between 75vh above and 25vh above bottom
+    const start    = secTop - vh * 0.75;
+    const end      = secTop + secHeight - vh * 0.25;
+    const progress = Math.max(0, Math.min(1, (window.scrollY - start) / (end - start)));
+
+    return progress * maxScroll;
+  };
+
   useEffect(() => {
-    const updateFromPageScroll = () => {
-      const section = sectionRef.current;
-      const track = trackRef.current;
+    // Initialise target/current from current scroll position
+    const init = targetFromScroll();
+    if (init !== null) {
+      targetRef.current  = init;
+      currentRef.current = init;
+    }
 
-      if (!section || !track || userInteractingRef.current) {
-        return;
-      }
-
-      const maxScroll = track.scrollWidth - track.clientWidth;
-      if (maxScroll <= 0) {
-        return;
-      }
-
-      const viewportHeight = window.innerHeight;
-      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-      const sectionHeight = section.offsetHeight;
-      const start = sectionTop - viewportHeight * 0.75;
-      const end = sectionTop + sectionHeight - viewportHeight * 0.25;
-      const progress = Math.max(0, Math.min(1, (window.scrollY - start) / (end - start)));
-
-      syncTrackToProgress(progress);
-      lastPageScrollAtRef.current = performance.now();
+    // Vertical scroll → update target
+    const onScroll = () => {
+      if (userInteractingRef.current) return;
+      const t = targetFromScroll();
+      if (t !== null) targetRef.current = t;
     };
 
-    let rafId = 0;
-    let scrollRafId = 0;
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
 
-    const loop = (time: number) => {
+    // Animation loop: lerp current → target, write to DOM
+    const loop = () => {
       const track = trackRef.current;
-      const section = sectionRef.current;
-      const sectionIsVisible =
-        section !== null
-        && section.getBoundingClientRect().bottom > 0
-        && section.getBoundingClientRect().top < window.innerHeight;
-
-      if (
-        track &&
-        sectionIsVisible &&
-        !userInteractingRef.current &&
-        time - lastPageScrollAtRef.current > 650
-      ) {
+      if (track) {
         const maxScroll = track.scrollWidth - track.clientWidth;
-        if (maxScroll > 0) {
-          const nextScrollLeft = track.scrollLeft + 0.18;
-          track.scrollTo({
-            left: nextScrollLeft > maxScroll ? 0 : nextScrollLeft,
-            behavior: "auto",
-          });
+
+        // Auto-drift when idle
+        if (!userInteractingRef.current && maxScroll > 0) {
+          const section = sectionRef.current;
+          const inView  =
+            section !== null &&
+            section.getBoundingClientRect().top    < window.innerHeight &&
+            section.getBoundingClientRect().bottom > 0;
+
+          if (inView) {
+            targetRef.current += AUTO_DRIFT_PX;
+            // Loop back to start when we reach the end
+            if (targetRef.current > maxScroll) {
+              targetRef.current  = 0;
+              currentRef.current = 0;
+            }
+          }
+        }
+
+        // Lerp
+        currentRef.current += (targetRef.current - currentRef.current) * LERP_FACTOR;
+
+        // Only write to DOM when meaningfully different (avoids forced layout)
+        const diff = Math.abs(currentRef.current - track.scrollLeft);
+        if (diff > 0.25) {
+          track.scrollLeft = currentRef.current;
         }
       }
 
-      rafId = window.requestAnimationFrame(loop);
+      rafRef.current = window.requestAnimationFrame(loop);
     };
 
-    const onScroll = () => {
-      if (scrollRafId) {
-        return;
-      }
-
-      scrollRafId = window.requestAnimationFrame(() => {
-        scrollRafId = 0;
-        updateFromPageScroll();
-      });
-    };
-
-    updateFromPageScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", updateFromPageScroll);
-    rafId = window.requestAnimationFrame(loop);
+    rafRef.current = window.requestAnimationFrame(loop);
 
     return () => {
-      window.cancelAnimationFrame(rafId);
-      window.cancelAnimationFrame(scrollRafId);
+      window.cancelAnimationFrame(rafRef.current);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", updateFromPageScroll);
-      if (interactionTimeoutRef.current !== null) {
-        window.clearTimeout(interactionTimeoutRef.current);
-      }
+      window.removeEventListener("resize", onScroll);
+      if (pauseTimerRef.current !== null) window.clearTimeout(pauseTimerRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -177,20 +172,23 @@ export default function Services() {
           animate={isInView ? "visible" : "hidden"}
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
           className="services-track"
-          onPointerDown={startInteractionPause}
-          onPointerEnter={startInteractionPause}
-          onWheel={startInteractionPause}
-          onTouchStart={startInteractionPause}
+          // Pause sync on any user interaction with the track
+          onPointerDown={pauseSync}
+          onWheel={pauseSync}
+          onTouchStart={pauseSync}
+          // Keep target in sync if user manually scrolls the track
           onScroll={() => {
-            if (userInteractingRef.current) {
-              lastPageScrollAtRef.current = performance.now();
+            const track = trackRef.current;
+            if (track && userInteractingRef.current) {
+              targetRef.current  = track.scrollLeft;
+              currentRef.current = track.scrollLeft;
             }
           }}
           aria-label="Панель услуг"
         >
           {SERVICES.slice(0, 6).map((service, i) => {
             const Media = serviceMedia[service.id as keyof typeof serviceMedia];
-            const Icon = serviceIcons[service.id as keyof typeof serviceIcons];
+            const Icon  = serviceIcons[service.id as keyof typeof serviceIcons];
             return (
               <motion.article
                 key={service.id}
