@@ -33,8 +33,8 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!isOpen) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsOpen(false);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -42,25 +42,58 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
         scrolled
           ? "border-b border-border/60 bg-bg/90 shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-lg"
           : "border-b border-transparent bg-transparent"
       }`}
     >
+      {/*
+        ╔══════════════════════════════════════════════════════════════════════════╗
+        ║  Auto-inversion layer                                       ║
+        ║                                                             ║
+        ║  How it works:                                              ║
+        ║  - A white "inversion mask" div covers the entire header.   ║
+        ║  - mix-blend-mode: difference on the nav content inverts    ║
+        ║    each pixel: white(#fff) on dark bg → stays light,       ║
+        ║    white(#fff) on light bg → inverts to dark.              ║
+        ║  - This happens per-pixel on the GPU — no JS needed.       ║
+        ║  - Works for every letter independently (posimvolno).      ║
+        ║                                                             ║
+        ║  Smoothness: CSS transition on color is not needed —       ║
+        ║  the blend happens continuously as the page scrolls.       ╠══╗
+        ╚═══════════════════════════════════════════════════════════════════════║ ║
+                                                                  ╚═╝
+      */}
       <div className="container-shell flex items-center justify-between gap-4 py-5">
-        <a href="#top" aria-label="Art of Paradise" className="shrink-0">
+        {/* Logo: difference blend so it also inverts on light bg */}
+        <a
+          href="#top"
+          aria-label="Art of Paradise"
+          className="shrink-0"
+          style={{ mixBlendMode: "difference" }}
+        >
           <Logo />
         </a>
 
-        <nav aria-label="Основная навигация" className="hidden items-center gap-8 md:flex">
+        {/* Desktop nav: white text + difference = auto-inverts */}
+        <nav
+          aria-label="Основная навигация"
+          className="hidden items-center gap-8 md:flex"
+          style={{ mixBlendMode: "difference" }}
+        >
           {links.map((link) => (
-            <a key={link.href} href={link.href} className="nav-link">
+            <a
+              key={link.href}
+              href={link.href}
+              className="nav-link-blend"
+            >
               {link.label}
             </a>
           ))}
         </nav>
 
+        {/* CTA button: keep its own styling, no blend on border/bg */}
         <div className="hidden md:block">
           <a
             href="#booking"
